@@ -36,9 +36,7 @@
       const toggleButton = chat?.shadowRoot?.querySelector('df-messenger-toggle-button');
 
       if (toggleButton) {
-        if (!chat.hasAttribute('opened')) {
           toggleButton.click();
-        }
         clearInterval(interval);
       }
     }, 100);
