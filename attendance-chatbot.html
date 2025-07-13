@@ -30,6 +30,10 @@
   };
 
     const dfMessenger = document.querySelector('df-messenger');
+    dfMessenger.addEventListener('df-ready', function () {
+    
+    window.openChatbox();
+  });
     
     dfMessenger.addEventListener('df-response-received', function(event) {
       const messages = event.detail.response.queryResult.fulfillmentMessages;
