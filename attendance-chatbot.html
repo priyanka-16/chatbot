@@ -57,6 +57,22 @@
       }
     });
 
+    window.sendMessageToChatbot = function (text) {
+    const dfMessenger = document.querySelector('df-messenger');
+    if (!dfMessenger) return;
+
+    const chat = dfMessenger.shadowRoot?.querySelector('df-messenger-chat');
+    if (!chat) return;
+
+    const input = chat.shadowRoot?.querySelector('df-messenger-user-input input');
+    const sendButton = chat.shadowRoot?.querySelector('df-messenger-user-input button');
+
+    if (input && sendButton) {
+      input.value = text;
+      input.dispatchEvent(new Event('input', { bubbles: true }));
+      sendButton.click();
+    }
+  };
 
   </script>
 </body>
