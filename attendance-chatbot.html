@@ -21,27 +21,24 @@
 
       // Check each fulfillment message for payload
       for (const msg of messages) {
-        if (msg.payload && msg.payload.fields) {
+        if (msg.payload) {
           // ✅ Extract your attendance data
-          const fields = msg.payload.fields.attendance_data.structValue.fields;
+          const payload = msg.payload;
 
-          const studentName = fields.student_name.listValue.values.map(v => v.stringValue);
-          const rollNumber = fields.roll_number.listValue.values.map(v => v.numberValue);
-          const status = fields.status.stringValue;
+  const studentName = payload.student_name;
+  const status = payload.status;
 
-          const attendanceData = {
-            student_name: studentName,
-            roll_number: rollNumber,
-            status: status
-          };
+  const attendanceData = {
+    student_name: studentName,
+    status: status
+  };
 
-          console.log('✅ Attendance Data:', attendanceData);
+  console.log('✅ Attendance Data:', attendanceData);
 
-          // ✅ Post to Flutter
-          if (window.AttendanceChannel) {
-            AttendanceChannel.postMessage(JSON.stringify(attendanceData));
-          }
-        }
+  if (window.AttendanceChannel) {
+    AttendanceChannel.postMessage(JSON.stringify(attendanceData));
+  }
+}
       }
     });
   </script>
