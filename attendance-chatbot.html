@@ -1,16 +1,62 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <title>Dialogflow Chatbot</title>
+  <meta charset="UTF-8" />
+  <title>Attendance Chatbot</title>
+
+  <!-- ✅ Dialogflow Messenger script -->
+  <script src="https://www.gstatic.com/dialogflow-console/fast/messenger/bootstrap.js?v=1"></script>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    #submit-btn {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background: #1976d2;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    #submit-btn:hover {
+      background: #1565c0;
+    }
+  </style>
 </head>
+
 <body>
-<script src="https://www.gstatic.com/dialogflow-console/fast/messenger/bootstrap.js?v=1"></script>
-<df-messenger
+  <!-- ✅ Dialogflow Messenger widget -->
+  <df-messenger
         intent="WELCOME"
-        chat-title="Filo-attendance-chatbot"
+        chat-title="Attendance-chatbot"
         agent-id="80b0458e-6086-4f3e-a7af-f12665e5f385"
         language-code="en"
 ></df-messenger>
+
+  <!-- ✅ Custom submit button -->
+  <button id="submit-btn">Submit Attendance</button>
+
+  <script>
+    // Example student data — in a real case,
+    // you should build this based on chatbot conversation
+    let attendanceData = {
+      student_name: ['Aarav Sharma', 'Abhinav Gupta'],
+      roll_number: [9, 10],
+      status: 'Absent'
+    };
+
+    // ✅ Send data to Flutter on button click
+    document.getElementById('submit-btn').addEventListener('click', function() {
+      if (window.AttendanceChannel) {
+        AttendanceChannel.postMessage(JSON.stringify(attendanceData));
+      } else {
+        alert('AttendanceChannel not found. Are you running inside Flutter WebView?');
+      }
+    });
+  </script>
 </body>
 </html>
