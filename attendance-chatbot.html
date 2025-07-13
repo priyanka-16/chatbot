@@ -15,17 +15,47 @@
   ></df-messenger>
 
   <script>
-    window.addEventListener('dfMessengerLoaded', function(event) {
-    const fab = document.querySelector('df-messenger').shadowRoot
-      .querySelector('df-messenger-chat')
-      .shadowRoot
-      .querySelector('df-messenger-toggle-button');
-
-    fab.click(); // simulate click to expand
-  });
-
+    function openDfMessenger() {
     const dfMessenger = document.querySelector('df-messenger');
-    
+    if (!dfMessenger) return;
+
+    const chat = dfMessenger.shadowRoot?.querySelector('df-messenger-chat');
+    if (!chat) return;
+
+    const toggleButton = chat.shadowRoot?.querySelector('df-messenger-toggle-button');
+
+    // If the toggle button exists and the chat is closed, click to open it
+    if (toggleButton && !chat.hasAttribute('opened')) {
+      toggleButton.click();
+    }
+  }
+
+  // Try repeatedly until it exists
+  function tryOpenUntilFound(retries = 20) {
+    openDfMessenger();
+    if (retries > 0) {
+      setTimeout(() => tryOpenUntilFound(retries - 1), 200);
+    }
+  }
+
+  // Listen for when dfMessenger is loaded
+  window.addEventListener('dfMessengerLoaded', function () {
+    tryOpenUntilFound();
+
+    // Also observe for collapse and auto-open again
+    const dfMessenger = document.querySelector('df-messenger');
+    const chat = dfMessenger.shadowRoot?.querySelector('df-messenger-chat');
+
+    if (chat) {
+      const observer = new MutationObserver(() => {
+        openDfMessenger();
+      });
+      observer.observe(chat, { attributes: true, attributeFilter: ['opened'] });
+    }
+  });
+  
+    const dfMessenger = document.querySelector('df-messenger');
+
     dfMessenger.addEventListener('df-response-received', function(event) {
       const messages = event.detail.response.queryResult.fulfillmentMessages;
 
