@@ -15,7 +15,7 @@
   ></df-messenger>
 
   <script>
-    window.openChatbox = function () {
+    window.openChatbox = function () { //this is to open chatbox by calling this function. currently this function is not being called.
     const dfMessenger = document.querySelector('df-messenger');
     if (!dfMessenger) return;
 
@@ -29,10 +29,19 @@
     }
   };
 
-    const dfMessenger = document.querySelector('df-messenger');
-    dfMessenger.addEventListener('df-ready', function () {
-    
-    window.openChatbox();
+    const dfMessenger = document.querySelector('df-messenger'); 
+    dfMessenger.addEventListener('df-ready', function () { //this is to open chatbox on pageload
+    const interval = setInterval(() => {
+      const chat = dfMessenger.shadowRoot?.querySelector('df-messenger-chat');
+      const toggleButton = chat?.shadowRoot?.querySelector('df-messenger-toggle-button');
+
+      if (toggleButton) {
+        if (!chat.hasAttribute('opened')) {
+          toggleButton.click();
+        }
+        clearInterval(interval);
+      }
+    }, 100);
   });
     
     dfMessenger.addEventListener('df-response-received', function(event) {
